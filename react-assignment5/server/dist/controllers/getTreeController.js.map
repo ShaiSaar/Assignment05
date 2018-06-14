@@ -1,0 +1,1 @@
+{"version":3,"file":"getTreeController.js","sourceRoot":"","sources":["../../controllers/getTreeController.ts"],"names":[],"mappings":";;AACA,wCAAwC;AAEzB,KAAK,4BAA4B,GAAW,EAAE,GAAY;IACrE,MAAM,IAAI,GAAG,MAAM,QAAQ,CAAC,OAAO,EAAE,CAAA;IACrC,GAAG,CAAC,IAAI,CAAC,EAAE,MAAM,EAAE,IAAI,EAAE,CAAC,CAAA;AAC9B,CAAC;AAHD,oCAGC;AAAA,CAAC"}
