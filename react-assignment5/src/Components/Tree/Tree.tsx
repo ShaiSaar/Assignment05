@@ -2,9 +2,11 @@ import * as React from 'react';
 import ChatTree from './chat-tree'
 import {events} from './common'
 import './TreeCss.css'
+import DataStore from "../../DataStore/DataStore";
 
 interface ITreeState {
-    searchInput: string
+    searchInput: string,
+    fullTree: any[]
 }
 
 
@@ -15,6 +17,7 @@ class Tree extends React.Component<any, ITreeState> {
     userLogedIn: boolean;
     mySearch: any
     onElementSelectHandler: boolean
+    fullTree:any[]
 
     constructor(props: {}) {
         super(props);
@@ -24,16 +27,19 @@ class Tree extends React.Component<any, ITreeState> {
         };
         this.myRef = React.createRef();
         this.state = {
-            searchInput: ""
+            searchInput: "",
+            fullTree: []
         }
+
     }
 
     searchOnTree1 = (val:string) => {
         let input = val
         const chatTree = ChatTree(this.myRef.current)
 
-        this.getTree()
-            .then((result: any) => {
+        let result = DataStore.getInstance().DBMainTree()
+        //let result = this.state.fullTree
+
                 if (input.length !== 0) {
                     let arrResults = this.getSearchResults(result, input)
                     chatTree.load(arrResults);
@@ -42,25 +48,37 @@ class Tree extends React.Component<any, ITreeState> {
                     this.onElementSelectHandler = !this.onElementSelectHandler
                     events.on("changeOnActiveElement", this.chooseElement)
                 }
-            })
+
+
+        // this.getTree()
+        //     .then((result: any) => {
+        //         if (input.length !== 0) {
+        //             let arrResults = this.getSearchResults(result, input)
+        //             chatTree.load(arrResults);
+        //         } else {chatTree.load(result);}
+        //         if(!this.onElementSelectHandler) {
+        //             this.onElementSelectHandler = !this.onElementSelectHandler
+        //             events.on("changeOnActiveElement", this.chooseElement)
+        //         }
+        //     })
     }
 
-    searchOnTree = () => {
-        let input = this.state.searchInput
-        const chatTree = ChatTree(this.myRef.current)
-
-        this.getTree()
-            .then((result: any) => {
-                if (input.length !== 0) {
-                    let arrResults = this.getSearchResults(result, input)
-                    chatTree.load(arrResults);
-                } else {chatTree.load(result);}
-                if(!this.onElementSelectHandler) {
-                    this.onElementSelectHandler = !this.onElementSelectHandler
-                    events.on("changeOnActiveElement", this.chooseElement)
-                }
-            })
-    }
+    // searchOnTree = () => {
+    //     let input = this.state.searchInput
+    //     const chatTree = ChatTree(this.myRef.current)
+    //
+    //     this.getTree()
+    //         .then((result: any) => {
+    //             if (input.length !== 0) {
+    //                 let arrResults = this.getSearchResults(result, input)
+    //                 chatTree.load(arrResults);
+    //             } else {chatTree.load(result);}
+    //             if(!this.onElementSelectHandler) {
+    //                 this.onElementSelectHandler = !this.onElementSelectHandler
+    //                 events.on("changeOnActiveElement", this.chooseElement)
+    //             }
+    //         })
+    // }
 
     getSearchResults = (tree: any, input: string) => {
         let arrResults: any = [];
@@ -79,8 +97,9 @@ class Tree extends React.Component<any, ITreeState> {
     }
     uploadTree = (show: boolean) => {
         const chatTree = ChatTree(this.myRef.current)
-        this.getTree()
-            .then((result: any) => {
+        let result = DataStore.getInstance().DBMainTree()
+        //let result = this.state.fullTree
+                console.log("getTree", result)
                 if (show) {
                     chatTree.load(result);
                     if(!this.onElementSelectHandler) {
@@ -92,19 +111,24 @@ class Tree extends React.Component<any, ITreeState> {
                 }
 
                 //this.myRef.current.focus();
-            })
     }
 
     componentDidMount() {
+        console.log("TREE componentDidMount")
         this.userLogedIn = this.props.showTree;
         this.setIndex = this.props.pickedIndex
         if (!this.props.showTree) {
             this.uploadTree(true)
         }
 
+
+    }
+    componentWillUpdate(){
+
     }
 
     componentDidUpdate() {
+        console.log("TREE componentDidUpdate")
         if (this.userLogedIn !== this.props.showTree) {
             this.userLogedIn = this.props.showTree
             if (!this.props.showTree) {
@@ -118,14 +142,21 @@ class Tree extends React.Component<any, ITreeState> {
 
     chooseElement = (element: any) => {
         let elm = element.getAttribute("dataId");
+        let type = element.getAttribute("dataType");
         elm = Number(elm);
         console.log("elm", elm, typeof elm);
         //this.setIndex.bind(null,3)
-        this.props.pickedIndex(elm)
+        try{
+            this.props.pickedIndex(elm,type,element.data.fullData)
+        }catch (e) {
+            console.log("TREE notify the App component failed", e)
+        }
+
     }
 
     getTree() {
-        return fetch('./tree.json')
+        return fetch('http://localhost:4000/tree/getFullTree')
+
             .then((result) => result.json());
 
     };
@@ -156,7 +187,7 @@ class Tree extends React.Component<any, ITreeState> {
         return (
 
             <section className="tree">
-                {(!this.props.showTree) ? searchBar() : null}
+                {/*{(!this.props.showTree) ? searchBar() : null}*/}
                 <ul tabIndex={0} ref={this.myRef}/>
             </section>
 

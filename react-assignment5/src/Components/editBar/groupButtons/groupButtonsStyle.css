@@ -1,0 +1,10 @@
+.GroupButtons {
+    display: inline-block;
+}
+
+img {
+    height: 30px;
+    width: 30px;
+    padding: 3px;
+    margin-left: 10px;
+}

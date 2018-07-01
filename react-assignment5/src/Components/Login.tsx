@@ -15,8 +15,8 @@ class Login extends React.Component <any,ILoginState>{
         super(props)
 
         this.state={
-            username:"",
-            password:"",
+            username:"shai",
+            password:"123",
             showMsg: false,
             msg:""
         }
@@ -37,18 +37,36 @@ class Login extends React.Component <any,ILoginState>{
     }
     clickHandler=()=>{
        //console.log("this is the click handler")
+        //todo: login user
+        let path="http://localhost:4000/users/getUserByName/"
+        fetch(`${path}${this.state.username}/${this.state.password}`)
+            .then((response) =>response.json())
+            .then((result)=>{
+                if(!!result["answer"]){
+                    let user = result["answer"]
+                    console.log("result - User found and authenticated", result)
+                    this.setStateHandler(false,"User found and authenticated")
+                    this.props.login(user)
+                }else{
+                this.setStateHandler(true,"Details are incorrect")
+                    console.log("result - Details are incorrect", result)
+                }
+                //this.props.login()
+            }
 
-       if(AuthenticationStore.getInstance().get(this.state.username)){
-           let password = AuthenticationStore.getInstance().get(this.state.username)
-           if(password=== this.state.password){
-               this.setStateHandler(false,"User found and authenticated")
-               this.props.login(this.state.username)
-           } else{
-               this.setStateHandler(true,"User's password is not correct")
-           }
-       }else{
-           this.setStateHandler(true,"Not such user exist")
-       }
+        )
+
+       // if(AuthenticationStore.getInstance().get(this.state.username)){
+       //     let password = AuthenticationStore.getInstance().get(this.state.username)
+       //     if(password=== this.state.password){
+       //         this.setStateHandler(false,"User found and authenticated")
+       //         this.props.login(this.state.username)
+       //     } else{
+       //         this.setStateHandler(true,"User's password is not correct")
+       //     }
+       // }else{
+       //     this.setStateHandler(true,"Not such user exist")
+       // }
         // this.props.login()
     }
 

@@ -1,0 +1,15 @@
+User:
+id++
+type- "user"
+Age- number
+name- string
+password- hash
+parent- [number]
+
+Group:
+id++
+type- "group"
+name- string
+parent - number
+Users - [User]
+Groups - [Group]

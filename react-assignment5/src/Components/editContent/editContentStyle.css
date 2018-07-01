@@ -1,0 +1,8 @@
+.editContent-wrapper {
+    width: 100%;
+    flex:1;
+    background-color: #c6fffa;
+    margin: 0;
+    padding: 5px;
+    border-radius: 0 0 5px 0;
+}

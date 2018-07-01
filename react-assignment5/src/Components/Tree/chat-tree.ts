@@ -79,6 +79,7 @@ function ChatTree(element:any) {
                 li.setAttribute("dataType", entry.type);
                 li.setAttribute("dataId", entry.id);
                 li.data.dataType=entry.type;
+                li.data.fullData=entry;
                 li.setAttribute("style", "padding-left:"+ Number(pad)*10+"px");
                 li.appendChild(document.createTextNode(entry.name));
 

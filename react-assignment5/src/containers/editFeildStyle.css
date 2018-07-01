@@ -1,0 +1,24 @@
+.app-edit-field {
+
+    width: 100%;
+    height: inherit;
+    position: absolute;
+    z-index: +5;
+    top:0px;
+    left:0px;
+    background: linear-gradient(to bottom right, #1343c2, #52ffd5);
+    /*opacity: 0.5;*/
+    /*height: 100%;*/
+    display: flex;
+    flex-direction: column;
+}
+
+.board-edit{
+    flex: 4;
+    border-radius: 0 5px 5px 0;
+    display: flex;
+    flex-direction: column;
+    background-color: #f8f9f9;
+    /*background-color: #d7dede;*/
+
+}

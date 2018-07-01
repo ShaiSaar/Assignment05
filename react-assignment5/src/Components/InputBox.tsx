@@ -1,9 +1,12 @@
 import * as React from 'react'
 import MessageStore from "../DataStore/MessageStore";
+import * as socketIO from 'socket.io'
+
 
 interface IInputBox {
     groupId: any;
     input: string
+    userLogged: object| null
 }
 
 class InputBox extends React.Component <any, IInputBox> {
@@ -12,20 +15,25 @@ class InputBox extends React.Component <any, IInputBox> {
         super(props)
         this.state = {
             groupId: null,
-            input: ""
+            input: "",
+            userLogged: null
         }
     }
 
     componentDidMount() {
+        console.log("INPUT BOX componentDidMount", this.props.userLoggedIn)
         this.setState({
-            groupId: this.props.idGroup
+            groupId: this.props.idGroup,
+            userLogged: this.props.userLoggedIn
         })
     }
 
     componentDidUpdate() {
+        console.log("INPUT BOX componentDidUpdate", this.props.userLoggedIn)
         if (this.props.idGroup !== this.state.groupId) {
             this.setState({
-                groupId: this.props.idGroup
+                groupId: this.props.idGroup,
+                userLogged: this.props.userLoggedIn
             })
         }
     }
@@ -35,7 +43,7 @@ class InputBox extends React.Component <any, IInputBox> {
             this.clearInput()
             return
         }
-        MessageStore.getInstance().set(this.state.groupId.toString(), this.state.input)
+        MessageStore.getInstance().set(this.props.idGroup,this.props.userLoggedIn.name, this.state.input)
         this.clearInput()
         this.props.renderApp()
 
