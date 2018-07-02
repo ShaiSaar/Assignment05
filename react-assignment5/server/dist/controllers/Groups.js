@@ -8,8 +8,8 @@ async function GetGroupByIdController(req, res) {
 exports.GetGroupByIdController = GetGroupByIdController;
 ;
 async function GetGroupsController(req, res) {
-    const allUsers = await services.getGroups();
-    res.json({ answer: allUsers });
+    const allGroups = await services.getGroups();
+    res.json({ answer: allGroups });
 }
 exports.GetGroupsController = GetGroupsController;
 ;

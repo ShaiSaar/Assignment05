@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const Model = require("../models");
+const Model = require("../models/index");
 async function fetchTree() {
     //const tree = await Model.getTree()
     return await Model.GetTree();

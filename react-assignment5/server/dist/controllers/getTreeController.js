@@ -12,24 +12,37 @@ async function GetTreeController(req, res) {
 exports.GetTreeController = GetTreeController;
 ;
 async function GetFullTreeController(req, res) {
-    let groupy = await services.getGroups(); //arr groups
-    let usery = await services.getUsers(); // arr users
-    let groups = [...groupy];
-    let users = [...usery];
+    let groups = await services.getGroups(); //arr groups
+    let users = await services.getUsers(); // arr users
+    debugger;
+    console.log("groups 11111", groups);
     let userOBJ = arrayToObject(users); // turn to obj
     let groupOBJ = arrayToObject(groups); // turn to obj
-    groups = assignObjectsToGroup(groups, userOBJ);
-    groups = assignObjectsToGroup(groups, groupOBJ);
+    debugger;
+    console.log("groups 2222", groups);
+    //groups = assignObjectsToGroup(groups,userOBJ)
+    //groups = assignObjectsToGroup(groups,groupOBJ)
+    debugger;
+    console.log("groups 3333", groups);
     let finalTree = createFinalTree(groups);
     //res.send({groups,users})
     res.send(finalTree);
 }
 exports.GetFullTreeController = GetFullTreeController;
 ;
+const getNewGroupsFromState = (arr) => {
+    let newArr = [];
+    for (let entry of arr) {
+        //let obj = Object.assign({},entry)
+        let obj = Object.assign({}, entry);
+        newArr.push(obj);
+    }
+    return newArr;
+};
 const arrayToObject = (arr) => {
     let newObj = {};
     for (let entry of arr) {
-        newObj[`${entry.id}`] = entry;
+        newObj[`${entry.id}`] = Object.assign({}, entry);
     }
     return newObj;
 };

@@ -7,7 +7,7 @@ const writeFileSync = util.promisify(fs.writeFile);
 class DBmessages {
     constructor() {
         //
-        this.path = `${__dirname}\\..\\..\\../models/DB/Json/Messages.json`;
+        this.path = `./Json/Messages.json`;
         this.readFromJson()
             .then((data) => {
             //console.log(`finished constructor:`,data)

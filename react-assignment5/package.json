@@ -24,10 +24,10 @@
     "start-client": "react-scripts-ts start",
     "build": "react-scripts-ts build",
     "test": "react-scripts-ts test --env=jsdom",
-    "start-server-ts": "tsc -p \"server/tsconfig.json\" -w",
+    "start-server-ts": "tsc -p \"tsconfig.json\" -w --prefix server",
     "eject": "react-scripts-ts eject",
     "start-server": "nodemon ./server/dist/index.js",
-    "start": "concurrently \"npm run start-server-ts\" \"npm run start-client\" \"npm run start-server\""
+    "start": "concurrently \"npm run tsc-w --prefix server\" \"npm run start-server --prefix server\" \"npm run start --prefix client\""
   },
   "devDependencies": {
     "@types/express": "^4.16.0",

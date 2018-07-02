@@ -7,7 +7,7 @@ const writeFileSync = util.promisify(fs.writeFile);
 class DBusers {
     constructor() {
         //
-        this.path = `${__dirname}\\..\\..\\../models/DB/Json/Users.json`;
+        this.path = `./Json/Users.json`;
         this.readFromJson()
             .then((data) => {
             //console.log(`finished constructor:`,data)
@@ -33,13 +33,18 @@ class DBusers {
     }
     getUsers() {
         return new Promise((resolve) => {
-            // const usersCopy = [...this.data]
-            // for(let user of usersCopy)
-            //     delete user.password
-            //
-            // resolve(usersCopy);
-            resolve(this.data);
+            let newArr = this.getNewUserssFromState(this.data);
+            resolve(newArr);
         });
+    }
+    getNewUserssFromState(arr) {
+        let newArr = [];
+        for (let entry of arr) {
+            //let obj = Object.assign({},entry)
+            let obj = Object.assign({}, entry);
+            newArr.push(obj);
+        }
+        return newArr;
     }
     getUserById() {
         return new Promise((resolve) => {
