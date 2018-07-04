@@ -86,8 +86,6 @@ class DBgroups {
             }
             let updatedGroup = Object.assign({}, this.data[index], groupBody);
             this.data[index] = updatedGroup;
-            console.log(">>>>>>>>>>>>>>>>data", this.data[index]);
-            console.log(">>>>>>>>>>>>>>>>>>>groupbody", groupBody);
             this.writeToJson();
             resolve(this.data[index]);
         });
@@ -96,25 +94,21 @@ class DBgroups {
         return new Promise((resolve) => {
             let index = this.data.findIndex(indx => indx.id == id);
             if (index === -1) {
-                resolve("No Group found asdasdasd");
+                resolve("failed");
                 return;
             }
-            let counter = 0;
             //delete the group
-            // this.data.splice(index,1)
-            // //delete group from the items of group
-            // let counter = 0
-            // for (let entry of this.data){
-            //     for (let i = 0; i < entry['items'].length; i++) {
-            //         if(entry['items'][i]==id){
-            //             entry['items'].splice(i,1)
-            //             counter++
-            //             console.log(`Group ${id} was deleted from ${entry.name}`)
-            //         }
-            //     }
-            // }
-            // this.writeToJson();
-            resolve(`Group has been deleted from ${counter} groups`);
+            this.data.splice(index, 1);
+            //delete group from the items of group
+            for (let entry of this.data) {
+                for (let i = 0; i < entry['items'].length; i++) {
+                    if (entry['items'][i] == id) {
+                        entry['items'].splice(i, 1);
+                    }
+                }
+            }
+            this.writeToJson();
+            resolve(`success`);
         });
     }
     deleteUserFromGroup(id) {
@@ -124,12 +118,12 @@ class DBgroups {
                 for (let i = 0; i < entry.items.length; i++) {
                     if (entry.items[i] == id) {
                         entry.items.splice(i, 1);
-                        console.log(`Group ${id} was deleted from ${entry.name}`);
+                        console.log(`success`);
                     }
                 }
             }
             this.writeToJson();
-            resolve("Group has been deleted");
+            resolve("success");
         });
     }
 }

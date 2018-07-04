@@ -124,34 +124,36 @@ class EditContent extends React.Component <any, any> {
         })
     }
     deleteGroup= ()=>{
-
         let path = `http://localhost:4000/groups/deleteGroup/${this.state.myItemID}`
         this.deleteMethod(path)
             .then(response => {
-                console.log('Success:', response)
-                if(!(response['answer']=="group exist")){
-                    DataStore.getInstance().DBaddGroup(response.answer)
-                    console.log("GROUP WAS ADDED",response )
+                if(!(response['answer']=="failed")){
+                    DataStore.getInstance().DBdeleteFromGroups(this.state.myItemID,true)
                 }
+
                 this.setState({})
                 this.props.updateCom()
             });
     }
 
     deleteUser= ()=>{
-        // if(this.state.myGroupName.length==0){
-        //     console.log("Name must be entered")
-        //     return
-        // }
-        // let path = `http://localhost:4000/groups/updateGroup/${this.state.myItemID}`
-        // let data = {
-        //     name: this.state.myGroupName
-        // }
-        // this.updateMethod(path,data)
+        let path = `http://localhost:4000/users/deleteUser/${this.state.myItemID}`
+        this.deleteMethod(path)
+            .then(response => {
+                if(!(response.answer=="failed")){
+                    DataStore.getInstance().DBdeleteFromGroups(this.state.myItemID,false)
+                    DataStore.getInstance().DBdeleteFromUsers(this.state.myItemID)
+                }
+                this.setState({})
+                this.props.updateCom()
+            });
     }
 
     deleteMethod =(url)=>{
-        return fetch(url).then(res => res.json())
+        return fetch(url, {
+            method: 'DELETE'
+        })
+            .then(res => res.json())
             .catch(error => console.error('Error:', error))
 
     }
@@ -167,10 +169,8 @@ class EditContent extends React.Component <any, any> {
         }
         this.addMethod(path,data)
             .then(response => {
-                console.log('Success:', response)
                 if(!(response['answer']=="group exist")){
                     DataStore.getInstance().DBaddGroup(response.answer)
-                    console.log("GROUP WAS ADDED",response )
                 }
                 this.setState({
                     myNEWGroupName: "",
@@ -209,10 +209,7 @@ class EditContent extends React.Component <any, any> {
     }
     updateGroup= ()=>{
 
-        if(this.state.myGroupName.length==0){
-            console.log("Name must be entered")
-            return
-        }
+        if(this.state.myGroupName.length==0){return}
         let path = `http://localhost:4000/groups/updateGroup/${this.state.myItemID}`
         let data = {
             name: this.state.myGroupName
@@ -220,7 +217,6 @@ class EditContent extends React.Component <any, any> {
         this.updateMethod(path,data)
         DataStore.getInstance().DBupdateGroup(this.state.myItemID,data)
         this.props.updateCom()
-        //this.updateMethod(path,data)
     }
     updateUser= ()=>{
         let path = `http://localhost:4000/users/updateUser/${this.state.myItemID}`
@@ -291,7 +287,7 @@ class EditContent extends React.Component <any, any> {
                         <div>
                             <button onClick={()=>console.log(this.state)}>State</button>
                             <button onClick={this.updateGroup}>UPDATE</button>
-                            <button onClick={()=>console.log(this.state)}>DELETE</button>
+                            <button onClick={this.deleteGroup}>DELETE</button>
                         </div>
                         <div className="addingGroupBox">
                             <h2>Adding New Group</h2>
@@ -327,7 +323,7 @@ class EditContent extends React.Component <any, any> {
                         <div>
                             <button onClick={()=>console.log(this.state)}>State</button>
                             <button onClick={this.updateUser}>UPDATE</button>
-                            <button onClick={()=>console.log(this.state)}>DELETE</button>
+                            <button onClick={this.deleteUser}>DELETE</button>
 
                         </div>
                         <div className="addingUserBox">

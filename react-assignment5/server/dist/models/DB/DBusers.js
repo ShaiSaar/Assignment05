@@ -74,8 +74,8 @@ class DBusers {
     getUserByName(name, password) {
         return new Promise((resolve) => {
             let index = this.data.findIndex(indx => indx.name == name);
-            console.log("DB Users index", index);
-            console.log("DB Users user", this.data[index]);
+            // console.log("DB Users index", index)
+            // console.log("DB Users user", this.data[index])
             if (index === -1) {
                 console.log("index===-1");
                 resolve(false);
@@ -83,9 +83,9 @@ class DBusers {
             }
             let user = this.data[index];
             if (user.password != password + "") {
-                console.log("user.password != password");
-                console.log("user.password", user);
-                console.log("client password", password);
+                // console.log("user.password != password")
+                // console.log("user.password",user)
+                // console.log("client password",password)
                 resolve(false);
                 return;
             }
@@ -126,12 +126,12 @@ class DBusers {
         return new Promise((resolve) => {
             let index = this.data.findIndex(indx => indx.id == id);
             if (index === -1) {
-                resolve("No user found");
+                resolve("failed");
                 return;
             }
             this.data.splice(index, 1);
             this.writeToJson();
-            resolve("User has been deleted");
+            resolve("success");
         });
     }
 }

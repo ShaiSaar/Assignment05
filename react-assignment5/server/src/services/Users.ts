@@ -1,6 +1,7 @@
 // import * as Model from '../models'
 import DBusers from '../models/DB/DBusers'
 import User from '../models/Moduls/User'
+import DBgroups from "../models/DB/DBgroups";
 // import Group from '../models/Moduls/Group'
 
 export async function addUser(name,password,age) {
@@ -31,5 +32,6 @@ export async function UpdateUser(id, bodyObj) {
 }
 
 export async function DeleteUser(id) {
+    await DBgroups.getInstance().deleteUserFromGroup(id);
     return await DBusers.getInstance().deleteUser(id);
 }

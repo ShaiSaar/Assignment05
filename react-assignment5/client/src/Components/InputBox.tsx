@@ -1,7 +1,6 @@
 import * as React from 'react'
-import MessageStore from "../DataStore/MessageStore";
-import * as socketIO from 'socket.io'
-
+import DataStore from "../DataStore/DataStore";
+import {socket} from "./../App"
 
 interface IInputBox {
     groupId: any;
@@ -21,18 +20,18 @@ class InputBox extends React.Component <any, IInputBox> {
     }
 
     componentDidMount() {
-        console.log("INPUT BOX componentDidMount", this.props.userLoggedIn)
+        //console.log("INPUT BOX componentDidMount", this.props.convObj)
         this.setState({
-            groupId: this.props.idGroup,
+            groupId: this.props.convObj,
             userLogged: this.props.userLoggedIn
         })
     }
 
     componentDidUpdate() {
-        console.log("INPUT BOX componentDidUpdate", this.props.userLoggedIn)
-        if (this.props.idGroup !== this.state.groupId) {
+        //console.log("INPUT BOX componentDidUpdate", this.props.convObj)
+        if (this.props.convObj.id !== this.state.groupId.id) {
             this.setState({
-                groupId: this.props.idGroup,
+                groupId: this.props.convObj,
                 userLogged: this.props.userLoggedIn
             })
         }
@@ -43,11 +42,15 @@ class InputBox extends React.Component <any, IInputBox> {
             this.clearInput()
             return
         }
-        MessageStore.getInstance().set(this.props.idGroup,this.props.userLoggedIn.name, this.state.input)
+        if(this.state.input.length==0)
+            return
+        //console.log("this.props.convObj ", this.props.convObj)
+        DataStore.getInstance().addMessage(this.props.convObj,this.props.userLoggedIn, this.state.input)
+        //console.log("INPUTBOX msg was added")
+        socket.emit("msg sent", {action:this.props.userLoggedIn.name})
         this.clearInput()
         this.props.renderApp()
-
-
+        return
     }
 
     clearInput = () => {
@@ -64,11 +67,11 @@ class InputBox extends React.Component <any, IInputBox> {
         // evt.keyCode == 13 && !evt.shiftKey
         if (e.key == 'Enter') {
             if(e.shiftKey){
-                console.log('enter + shift key press here! ')
+                //console.log('enter + shift key press here! ')
                 return;
             }else{
                 this.clickHandler();
-                console.log('enter press here! ')
+                //console.log('enter press here! ')
             }
 
         }

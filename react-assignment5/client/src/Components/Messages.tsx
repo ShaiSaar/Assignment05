@@ -1,10 +1,12 @@
 import * as React from 'react';
 import Message from './Message';
-import MessageStore from "../DataStore/MessageStore";
+import DataStore from "../DataStore/DataStore";
 
 interface IMessages {
     messageStore: any,
-    idGroup : number
+    idGroup : number | null
+    idUser : number | null
+
 }
 class Messages extends React.Component <any,IMessages> {
 
@@ -14,13 +16,14 @@ class Messages extends React.Component <any,IMessages> {
         this.state ={
             messageStore: [],
             idGroup : 0,
+            idUser : 0,
 
         }
         this.myRef = React.createRef()
     }
 
-    getMessages(arr:any){
-        return MessageStore.getInstance().get(arr)
+    getMessages(idUser:any,idGroup:any){
+        return DataStore.getInstance().getMessagesOfUser(idUser,idGroup)
     }
     componentDidMount(){
         if(this.props.idGroup===this.state.idGroup){
@@ -28,13 +31,16 @@ class Messages extends React.Component <any,IMessages> {
         }else{
             this.setState({
                 idGroup : this.props.idGroup,
-                messageStore: this.getMessages(this.props.idGroup)
+                idUser : this.props.idUser,
+                messageStore: this.getMessages(this.props.idUser,this.props.idGroup)
             })
             this.forceUpdate()
         }
         return
     }
     componentDidUpdate(){
+        console.log("MESSAGES state.messageStore  msgs ",this.state.messageStore)
+        console.log("MESSAGES DataStore msgs ",DataStore.getInstance().getAllUsersMessages())
         const objDiv = document.querySelector("ul.messages");
         if(this.props.idGroup===this.state.idGroup){
 
@@ -43,7 +49,8 @@ class Messages extends React.Component <any,IMessages> {
         }else{
             this.setState({
                 idGroup : this.props.idGroup,
-                messageStore: this.getMessages(this.props.idGroup)
+                idUser : this.props.idUser,
+                messageStore: this.getMessages(this.props.idUser, this.props.idGroup)
             })
             console.log("this.state",this.state)
             if(!!objDiv){objDiv.scrollTop = objDiv.scrollHeight;}
@@ -54,6 +61,13 @@ class Messages extends React.Component <any,IMessages> {
 
 
     render(){
+
+        const messges = ()=>{
+            this.state.messageStore.map((msg:any,i:any) => {
+                let classType = (this.state.idUser==msg.senderID) ? "me" : "notMe"
+                return <Message key={i} classType={classType} senderName={msg.senderName} senderContent={msg.senderContent} senderDate={msg.senderDate}/>
+            })
+        }
         return(
             <ul className="messages" ref={this.myRef}>
 

@@ -11,6 +11,15 @@ const server = http.createServer(app_1.default);
 const io = socket(server);
 io.on('connection', socket => {
     console.log('User connected');
+    let userConnected = "";
+    socket.on('login', (data) => {
+        console.log(`User ${data.name} signed in`);
+        userConnected = data.name;
+    });
+    socket.on('msg sent', (data) => {
+        //console.log(`User ${userConnected} sent a msg`)
+        console.log(`User ${data.action} sent a msg`);
+    });
     socket.on('disconnect', () => {
         console.log('user disconnected');
     });

@@ -12,6 +12,8 @@ import * as socketIOClient from 'socket.io-client'
 
 export const socket = socketIOClient("http://localhost:4000")
 
+
+
 interface IAppState {
     index: null|number,
     indexType: string|null
@@ -39,8 +41,8 @@ class App extends React.Component <{}, IAppState> {
     }
 
     setIndexHandler = (e: any, type, itemObj) => {
-        console.log("this.state.index = entry ==>", e)
-        console.log("App item chosen = itemObj ==>", itemObj)
+        // console.log("this.state.index = entry ==>", e)
+        // console.log("App item chosen = itemObj ==>", itemObj)
         this.setState({
             index: e,
             indexType: type,
@@ -66,7 +68,6 @@ class App extends React.Component <{}, IAppState> {
         }
     }
     setLoginHandler = (user:object) => {
-        console.log("setLoginHandler", user)
         let state = this.state.loginNeeded
 
         this.setState({
@@ -77,8 +78,7 @@ class App extends React.Component <{}, IAppState> {
 
 
         })
-
-        console.log("setLoginHandler", this.state)
+        socket.emit("login", {name:this.state.username})
     }
     shouldComponentUpdate(nextProps, nextState){
         console.log("APP shouldComponentUpdate")
@@ -96,7 +96,6 @@ class App extends React.Component <{}, IAppState> {
     }
     public render() {
         const loginRenderer = () => {
-            console.log("loginRenderer")
            return (this.state.loginNeeded)? <Login login={this.setLoginHandler} /> : <Redirect to=''/>
 
         }
@@ -119,8 +118,8 @@ class App extends React.Component <{}, IAppState> {
 
                             <Tree pickedIndex={this.setIndexHandler} showTree={this.state.loginNeeded} upDateTree={this.state.DBtree}/>
                             <section className="board">
-                                <Messages idGroup={this.state.index}/>
-                                <InputBox idGroup={this.state.index} renderApp={this.reRender} userLoggedIn={this.state.userLogedIn}/>
+                                {this.state.userLogedIn && <Messages idGroup={this.state.index} idUser={this.state.userLogedIn.id}/>}
+                                <InputBox convObj={this.state.fullObj} renderApp={this.reRender} userLoggedIn={this.state.userLogedIn}/>
                             </section>
                         </div>
                         {/*<footer><h2>This is my footer</h2></footer>*/}

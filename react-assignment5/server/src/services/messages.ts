@@ -4,6 +4,7 @@ import Message from '../models/Moduls/Message'
 // import Group from '../models/Moduls/Group'
 
 export async function addMessage(senderID, senderName, content, groupId) {
+    //convObj: object, userObj:object, value:string
     const newMessage = new Message(senderID, senderName, content)
     return await DBmessages.getInstance().createMessage(newMessage, groupId)
 

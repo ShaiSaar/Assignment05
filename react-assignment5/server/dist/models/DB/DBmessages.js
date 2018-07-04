@@ -36,15 +36,53 @@ class DBmessages {
             resolve(this.data);
         });
     }
-    createMessage(Message, groupId) {
+    createMessage(convObj, userObj, value) {
         return new Promise((resolve) => {
-            console.log("this.data=======>", this.data);
-            if (!this.data[`${groupId}`]) {
-                this.data[`${groupId}`] = [];
+            // console.log("this.data=======>",this.data)
+            // if(!this.data[`${groupId}`]){
+            //     this.data[`${groupId}`] = []
+            // }
+            // this.data[`${groupId}`].push(Message);
+            // this.writeToJson();
+            // resolve(Message);
+            ///////////////////
+            let today = new Date();
+            let msg = {
+                classType: "me",
+                senderName: userObj['name'],
+                senderID: userObj['id'],
+                convType: convObj['type'],
+                convName: convObj['name'],
+                convID: convObj['id'],
+                senderContent: value,
+                senderDate: "sent at " + today.toLocaleTimeString() + " " + today.toLocaleDateString()
+            };
+            //console.log("msg.classType 1", msg.classType)
+            let senderID = userObj['id'];
+            let convID = convObj['id'];
+            if (!(this.data[senderID])) {
+                this.data[senderID] = {};
             }
-            this.data[`${groupId}`].push(Message);
-            this.writeToJson();
-            resolve(Message);
+            if (!(this.data[senderID].convID)) {
+                this.data[senderID].convID = [];
+            }
+            this.data[senderID][convID].push(msg);
+            if (convObj['type'] === "user") {
+                if (!(this.data[convID])) {
+                    this.data[convID] = {};
+                }
+                if (!(this.data[convID].senderID)) {
+                    this.data[convID].senderID = [];
+                }
+                this.data[convID].senderID.push(msg);
+            }
+            // let msg2 = Object.assign({}, msg)
+            // msg2.classType = "notMe"
+            // msg2.senderContent += msg.classType
+            // this.state[key].push(msg2)
+            // console.log("msg.classType 2", msg2.classType)
+            resolve(msg);
+            ////////////////////
         });
     }
     getMessagesById(id) {

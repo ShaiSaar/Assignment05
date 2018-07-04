@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // import * as Model from '../models'
 const DBusers_1 = require("../models/DB/DBusers");
 const User_1 = require("../models/Moduls/User");
+const DBgroups_1 = require("../models/DB/DBgroups");
 // import Group from '../models/Moduls/Group'
 async function addUser(name, password, age) {
     let checkIfUserExist = await DBusers_1.default.getInstance().checkIfUserExist(name);
@@ -31,6 +32,7 @@ async function UpdateUser(id, bodyObj) {
 }
 exports.UpdateUser = UpdateUser;
 async function DeleteUser(id) {
+    await DBgroups_1.default.getInstance().deleteUserFromGroup(id);
     return await DBusers_1.default.getInstance().deleteUser(id);
 }
 exports.DeleteUser = DeleteUser;

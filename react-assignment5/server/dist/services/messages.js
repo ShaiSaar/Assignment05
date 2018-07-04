@@ -5,6 +5,7 @@ const DBmessages_1 = require("../models/DB/DBmessages");
 const Message_1 = require("../models/Moduls/Message");
 // import Group from '../models/Moduls/Group'
 async function addMessage(senderID, senderName, content, groupId) {
+    //convObj: object, userObj:object, value:string
     const newMessage = new Message_1.default(senderID, senderName, content);
     return await DBmessages_1.default.getInstance().createMessage(newMessage, groupId);
 }

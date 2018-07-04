@@ -13,6 +13,7 @@ export async function GetMessagesController(req:Request, res:Response) {
 
 
 export async function AddMessageController(req:Request, res:Response) {
+    //convObj: object, userObj:object, value:string
     const newMessage = await services.addMessage(req.body.senderID, req.body.senderName, req.body.content, req.params.groupId)
     res.json({ answer: newMessage })
 };
