@@ -8,6 +8,8 @@ interface IInputBox {
     userLogged: object| null
 }
 
+
+
 class InputBox extends React.Component <any, IInputBox> {
 
     constructor(props: any) {
@@ -44,19 +46,43 @@ class InputBox extends React.Component <any, IInputBox> {
         }
         if(this.state.input.length==0)
             return
-        //console.log("this.props.convObj ", this.props.convObj)
-        DataStore.getInstance().addMessage(this.props.convObj,this.props.userLoggedIn, this.state.input)
-        //console.log("INPUTBOX msg was added")
-        socket.emit("msg sent", {action:this.props.userLoggedIn.name})
+        let today = new Date()
+        let msg = {
+            classType: "notMe",
+            senderName: this.props.userLoggedIn['name'],
+            senderID: this.props.userLoggedIn['id'],
+            convType: this.props.convObj['type'],
+            convName: this.props.convObj['name'],
+            convID: this.props.convObj['id'],
+            senderContent: this.state.input,
+            senderDate: "sent at " + today.toLocaleTimeString() + " " + today.toLocaleDateString()
+        }
+
+        socket.emit("msg sent", {msg:msg,conv: this.props.convObj['id']})
+        // socket.emit("msg sent", {convObj:this.props.convObj,
+        //     userLoggedIn:this.props.userLoggedIn,
+        //     content:this.state.input})
+
+        socket.on('gotMessage', (data)=>{
+            DataStore.getInstance().addMessage(data.msg, data.conv, this.props.userLoggedIn['id'])
+            this.props.renderApp()
+        })
+        msg.classType = "me"
+        DataStore.getInstance().addMessage(msg, this.props.convObj['id'], this.props.userLoggedIn['id'])
         this.clearInput()
         this.props.renderApp()
         return
     }
 
+
     clearInput = () => {
         this.setState({
             input: ""
         })
+    }
+
+    addMessageToData(){
+
     }
     setInput = (event: any) => {
         this.setState({
@@ -79,6 +105,7 @@ class InputBox extends React.Component <any, IInputBox> {
     }
 
     render() {
+
         return (
             <div className="input-box">
                 <input type="text" onChange={this.setInput} placeholder="enter your message here" value={this.state.input} onKeyPress={this.keyHandler}/>

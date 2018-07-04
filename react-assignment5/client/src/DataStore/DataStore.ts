@@ -45,47 +45,65 @@ class DataStore {
         return DataStore.instance;
     }
 
-    addMessage(convObj: object, userObj:object, value:string) {
-        let today = new Date()
-        let msg = {
-            classType: "me",
-            senderName: userObj['name'],
-            senderID: userObj['id'],
-            convType: convObj['type'],
-            convName: convObj['name'],
-            convID: convObj['id'],
-            senderContent: value,
-            senderDate: "sent at " + today.toLocaleTimeString() + " " + today.toLocaleDateString()
-        }
-        //console.log("msg.classType 1", msg.classType)
-        let senderID= userObj['id']
-        let convID = convObj['id']
-        if(!(this.state.messages[senderID])){
-            this.state.messages[senderID]={}
-        }
-        if(!(this.state.messages[senderID][convID])){
-            this.state.messages[senderID][convID]=[]
-        }
-        this.state.messages[senderID][convID].push(msg)
+    addMessage(msg:{},convID:number, myId:number) {
 
-        if(convObj['type']==="user"){
-            if(!(this.state.messages[convID])){
-                this.state.messages[convID]={}
-            }
-            if(!(this.state.messages[convID][senderID])){
-                this.state.messages[convID][senderID]=[]
-            }
-            this.state.messages[convID][senderID].push(msg)
+        //console.log("msg.classType 1", msg.classType)
+        if(!(this.state.messages[myId])){
+            this.state.messages[myId]={}
         }
-        // let msg2 = Object.assign({}, msg)
-        // msg2.classType = "notMe"
-        // msg2.senderContent += msg.classType
-        // this.state[key].push(msg2)
-        // console.log("msg.classType 2", msg2.classType)
-        //console.log("DATASOTRE msg was added", msg)
+        if(!(this.state.messages[myId][convID])){
+            this.state.messages[myId][convID]=[]
+        }
+        this.state.messages[myId][convID].push(msg)
+
+        // if(convObj['type']==="user"){
+        //     if(!(this.state.messages[convID])){
+        //         this.state.messages[convID]={}
+        //     }
+        //     if(!(this.state.messages[convID][senderID])){
+        //         this.state.messages[convID][senderID]=[]
+        //     }
+        //     this.state.messages[convID][senderID].push(msg)
+        // }
 
         return true;
     }
+    // addMessage(convObj: object, userObj:object, value:string, myId:number) {
+    //     let today = new Date()
+    //     let msg = {
+    //         classType: "me",
+    //         senderName: userObj['name'],
+    //         senderID: userObj['id'],
+    //         convType: convObj['type'],
+    //         convName: convObj['name'],
+    //         convID: convObj['id'],
+    //         senderContent: value,
+    //         senderDate: "sent at " + today.toLocaleTimeString() + " " + today.toLocaleDateString()
+    //     }
+    //     //console.log("msg.classType 1", msg.classType)
+    //     let senderID= userObj['id']
+    //     let convID = convObj['id']
+    //     if(!(this.state.messages[myId])){
+    //         this.state.messages[myId]={}
+    //     }
+    //     if(!(this.state.messages[myId][convID])){
+    //         this.state.messages[myId][convID]=[]
+    //     }
+    //     this.state.messages[myId][convID].push(msg)
+    //
+    //     // if(convObj['type']==="user"){
+    //     //     if(!(this.state.messages[convID])){
+    //     //         this.state.messages[convID]={}
+    //     //     }
+    //     //     if(!(this.state.messages[convID][senderID])){
+    //     //         this.state.messages[convID][senderID]=[]
+    //     //     }
+    //     //     this.state.messages[convID][senderID].push(msg)
+    //     // }
+    //
+    //     return true;
+    // }
+
     getMessagesOfUser(idUser,idGroup){
         //console.log("DATASOTRE getMessages")
 

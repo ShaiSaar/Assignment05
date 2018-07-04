@@ -65,6 +65,7 @@ class App extends React.Component <{}, IAppState> {
                 statusLogin:"Login",
 
             })
+            socket.emit("logout", {name:this.state.userLogedIn})
         }
     }
     setLoginHandler = (user:object) => {
@@ -78,7 +79,7 @@ class App extends React.Component <{}, IAppState> {
 
 
         })
-        socket.emit("login", {name:this.state.username})
+        socket.emit("login", {name:this.state.userLogedIn})
     }
     shouldComponentUpdate(nextProps, nextState){
         console.log("APP shouldComponentUpdate")

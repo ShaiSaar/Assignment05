@@ -63,18 +63,18 @@ class DBmessages {
             if (!(this.data[senderID])) {
                 this.data[senderID] = {};
             }
-            if (!(this.data[senderID].convID)) {
-                this.data[senderID].convID = [];
+            if (!(this.data[senderID][convID])) {
+                this.data[senderID][convID] = [];
             }
             this.data[senderID][convID].push(msg);
             if (convObj['type'] === "user") {
                 if (!(this.data[convID])) {
                     this.data[convID] = {};
                 }
-                if (!(this.data[convID].senderID)) {
-                    this.data[convID].senderID = [];
+                if (!(this.data[convID][senderID])) {
+                    this.data[convID][senderID] = [];
                 }
-                this.data[convID].senderID.push(msg);
+                this.data[convID][senderID].push(msg);
             }
             // let msg2 = Object.assign({}, msg)
             // msg2.classType = "notMe"
